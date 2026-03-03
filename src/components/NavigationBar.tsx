@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { AvatarDropdown } from "./ui/AvatarDropdown";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 const NavigationBar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -18,6 +19,7 @@ const NavigationBar = () => {
   const handleLogout = () => {
     localStorage.removeItem("token");
     setIsLoggedIn(false);
+    toast.success("Bye Bye Buddy!!");
     router.push("/");
   };
 

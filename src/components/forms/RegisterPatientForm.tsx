@@ -27,6 +27,7 @@ import {
 } from "@/constants";
 import Image from "next/image";
 import { SelectItem } from "../ui/select";
+import toast from "react-hot-toast";
 
 export default function RegisterPatientForm({
   patient,
@@ -81,6 +82,7 @@ export default function RegisterPatientForm({
 
       if (updatedPatient) {
         console.log(updatedPatient);
+        toast.success("Registered Sucessfully!!!");
         router.push(`/`);
       }
 

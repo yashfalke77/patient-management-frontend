@@ -13,6 +13,7 @@ import { Form } from "../ui/form";
 import { userSchema } from "@/models/user.model";
 import { login } from "@/services/user.service";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 
 export default function LoginForm() {
@@ -35,6 +36,7 @@ export default function LoginForm() {
   
         if (token) {
           console.log(token);
+          toast.success("Welcome Back Buddy!!");
           localStorage.setItem("token", token);
           router.push(`/`);
         }
