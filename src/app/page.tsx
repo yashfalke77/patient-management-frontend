@@ -10,7 +10,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { Card, CardContent } from "@/components/ui/card";
+import NavigationBar from "@/components/NavigationBar";
 
 function page() {
   const reviews = [
@@ -48,45 +48,7 @@ function page() {
 
   return (
     <main>
-      <nav className="flex justify-between items-center h-24 z-50 sticky px-8 text-base font-medium">
-        <section className="flex items-center">
-          <Image
-            src="/icons/logo-full.svg"
-            height={1000}
-            width={1000}
-            className="logo h-10 w-fit"
-            alt="logo"
-          />
-        </section>
-
-        <section className="">
-          <Link href="/" className="mx-6 transition-all hover:text-green-500">
-            Home
-          </Link>
-          <Link href="/" className="mx-6 transition-all hover:text-green-500">
-            Services
-          </Link>
-          <Link href="/" className="mx-6 transition-all hover:text-green-500">
-            Testimonals
-          </Link>
-          <Link href="/" className="mx-6 transition-all hover:text-green-500">
-            Resources
-          </Link>
-          <Link href="/" className="mx-6 transition-all hover:text-green-500">
-            About
-          </Link>
-        </section>
-
-        <section>
-          <Button
-            variant="link"
-            className="rounded-[15px] px-5 shad-primary-btn hover:no-underline"
-          >
-            <Link href="/login">Login -&gt;</Link>
-          </Button>
-        </section>
-      </nav>
-
+      <NavigationBar />
       <section className="p-5">
         <div className={styles.heroImage}>
           <div className="w-1/2 ml-14">
