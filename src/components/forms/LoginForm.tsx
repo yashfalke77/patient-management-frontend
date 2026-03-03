@@ -6,29 +6,48 @@ import { useForm } from "react-hook-form";
 import CustomFormField from "../CustomFormField";
 import SubmitButton from "../SubmitButton";
 import { useState } from "react";
-import { userFormValidation } from "@/lib/validation";
+import { loginFormValidation, userFormValidation } from "@/lib/validation";
 import z from "zod";
 import { FormFieldTypes } from "@/lib/enum";
-import { Form } from "../ui/form"; // ← add this import
+import { Form } from "../ui/form";
+import { userSchema } from "@/models/user.model";
+import { login } from "@/services/user.service";
+import { useRouter } from "next/navigation";
 
-export default function PatientForm() {
+
+export default function LoginForm() {
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
-  const form = useForm<z.infer<typeof userFormValidation>>({
-    resolver: zodResolver(userFormValidation),
+  const form = useForm<z.infer<typeof loginFormValidation>>({
+    resolver: zodResolver(loginFormValidation),
     defaultValues: {
       email: "",
       password: "",
     },
   });
 
-  function onSubmit(data: z.infer<typeof userFormValidation>) {
-    console.log(data);
+  async function onSubmit({email, password}: z.infer<typeof loginFormValidation>) {
+    setIsLoading(true);
+    try {
+        const userData: userSchema = { email, password };
+        const token = await login(userData);
+  
+        if (token) {
+          console.log(token);
+          localStorage.setItem("token", token);
+          router.push(`/`);
+        }
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setIsLoading(false); // ← use finally so it always resets
+      }
   }
 
   return (
     <section>
-      <Form {...form}>  {/* ← wrap with Form */}
+      <Form {...form}>
         <form
           id="patientForm"
           onSubmit={form.handleSubmit(onSubmit)}
@@ -61,7 +80,7 @@ export default function PatientForm() {
 
           <div className="mt-14">
             <SubmitButton isLoading={isLoading} id="patientForm">
-              Get Started
+              Login
             </SubmitButton>
           </div>
         </form>

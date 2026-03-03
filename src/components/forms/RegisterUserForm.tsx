@@ -10,7 +10,7 @@ import { userFormValidation } from "@/lib/validation";
 import z from "zod";
 import { FormFieldTypes } from "@/lib/enum";
 import { userSchema } from "@/models/user.model";
-import { register } from "@/services/userService";
+import { register } from "@/services/user.service";
 import { useRouter } from "next/navigation";
 import { Form } from "../ui/form"; // ← add this
 

@@ -1,5 +1,4 @@
-import PatientForm from "@/components/forms/PatientForm";
-import { Button } from "@/components/ui/button";
+import LoginForm from "@/components/forms/LoginForm";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -16,7 +15,7 @@ export default function page() {
           alt="logo"
           />
 
-          <PatientForm />
+          <LoginForm />
 
           <div className="flex justify-between mt-4">
             <span className="text-[#636369] leading-8 text-sm">

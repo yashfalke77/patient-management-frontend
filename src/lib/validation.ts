@@ -14,7 +14,7 @@ export const userFormValidation = z
       .max(100, "Password must be at most 100 characters.")
       .regex(
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).+$/,
-        "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character."
+        "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.",
       ),
 
     confirmPassword: z.string(),
@@ -25,6 +25,21 @@ export const userFormValidation = z
   });
 
 export type UserFormData = z.infer<typeof userFormValidation>;
+
+export const loginFormValidation = z.object({
+  email: z
+    .string()
+    .email("Please enter a valid email address.")
+    .min(5, "Email must be at least 5 characters.")
+    .max(32, "Email must be at most 32 characters."),
+
+  password: z
+    .string()
+    .min(8, "Password must be at least 8 characters.")
+    .max(100, "Password must be at most 100 characters."),
+});
+
+export type LoginFormData = z.infer<typeof loginFormValidation>;
 
 export const PatientFormValidation = z.object({
   firstName: z
@@ -38,8 +53,14 @@ export const PatientFormValidation = z.object({
   email: z.string().email("Invalid email address"),
   phoneNumber: z
     .string()
-    .refine((phoneNumber) => /^\+\d{10,15}$/.test(phoneNumber), "Invalid phone number"),
-  dateOfBirth: z.preprocess((val) => (val ? new Date(val as string) : undefined), z.date()),
+    .refine(
+      (phoneNumber) => /^\+\d{10,15}$/.test(phoneNumber),
+      "Invalid phone number",
+    ),
+  dateOfBirth: z.preprocess(
+    (val) => (val ? new Date(val as string) : undefined),
+    z.date(),
+  ),
   gender: z.enum(["Male", "Female", "Other"]),
   address: z
     .string()
@@ -57,7 +78,7 @@ export const PatientFormValidation = z.object({
     .string()
     .refine(
       (emergencyContactNumber) => /^\+\d{10,15}$/.test(emergencyContactNumber),
-      "Invalid phone number"
+      "Invalid phone number",
     ),
   primaryPhysician: z.string().min(2, "Select at least one doctor"),
   insuranceProvider: z
