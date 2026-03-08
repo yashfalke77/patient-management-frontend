@@ -15,3 +15,8 @@ export const updatePatientById = async(id: string, patientData: PatientSchema,  
     })
     return patient;
 }
+
+export const getPatientByUserId = async(userId: string) => {
+    const {data: patient} = await axios.get(`${backendApiUrl}/api/patient/user/${userId}`);
+    return patient;
+}

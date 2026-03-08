@@ -24,7 +24,7 @@ interface CustomProps {
   iconAlt?: string;
   disabled?: boolean;
   dateFormat?: string;
-  showTimeSelect?: string;
+  showTimeSelect?: boolean;
   children?: React.ReactNode;
   renderSkeleton?: (field: any) => React.ReactNode;
 }
@@ -107,11 +107,12 @@ const RenderField = ({
           <DatePicker
             selected={field.value ? new Date(field.value) : null}
             onChange={(date: Date | null) => field.onChange(date)}
-            dateFormat="dd/MM/yyyy"
+            dateFormat="dd/MM/yyyy hh:mm:ss"
             autoComplete="off"
             placeholderText="Select date"
             className="bg-transparent outline-none w-full text-white"
             wrapperClassName="date-picker"
+            showTimeSelect={props.showTimeSelect ? true : false}
           />
         </div>
       );

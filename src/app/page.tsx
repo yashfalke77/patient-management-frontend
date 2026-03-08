@@ -11,6 +11,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import NavigationBar from "@/components/NavigationBar";
+import HeroSection from "@/components/HeroSection";
 
 function page() {
   const reviews = [
@@ -49,30 +50,8 @@ function page() {
   return (
     <main>
       <NavigationBar />
-      <section className="p-5">
-        <div className={styles.heroImage}>
-          <div className="w-1/2 ml-14">
-            <h1 className="mb-4 text-4xl font-bold tracking-tight text-heading md:text-5xl lg:text-6xl">
-              Compassionate Care,
-            </h1>
-            <h1 className="mb-4 text-4xl font-bold tracking-tight text-heading md:text-5xl lg:text-6xl">
-              Right at Your Fingertips
-            </h1>
-            <p className="mb-6 text-lg font-normal text-body lg:text-xl">
-              From booking appointments to tracking your health records,
-              CarePlus makes managing your care simple, seamless, and
-              effortless.
-            </p>
-            <Button
-              variant="link"
-              className="rounded-[20px] px-5 text-xl shad-primary-btn px-7 py-6 hover:no-underline"
-            >
-              Book Appointment
-            </Button>
-          </div>
-          <div></div>
-        </div>
-      </section>
+      
+      <HeroSection />
 
       <section className="flex justify-center items-center w-full px-[8rem] my-24 ">
         <div className="w-1/2">

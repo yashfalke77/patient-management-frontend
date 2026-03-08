@@ -32,12 +32,12 @@ export default function LoginForm() {
     setIsLoading(true);
     try {
         const userData: userSchema = { email, password };
-        const token = await login(userData);
+        const data = await login(userData);
   
-        if (token) {
-          console.log(token);
+        if (data) {
+          console.log(data.token);
           toast.success("Welcome Back Buddy!!");
-          localStorage.setItem("token", token);
+          localStorage.setItem("token", data.token);
           router.push(`/`);
         }
       } catch (error) {
