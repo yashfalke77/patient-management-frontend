@@ -4,16 +4,18 @@ import Link from "next/link";
 
 export default function page() {
   return (
-    <div className='remove-scrollbar flex h-screen max-h-screen;'>
-      <main className='container my-auto;'>
-        <div className='sub-container max-w-[496px]'>
-          <Image
-            src="/icons/logo-full.svg"
-          height={1000}
-          width={1000}
-          className='logo h-10 mb-12 w-fit'
-          alt="logo"
-          />
+    <div className="remove-scrollbar flex h-screen max-h-screen;">
+      <main className="container my-auto;">
+        <div className="sub-container max-w-[496px]">
+          <Link href="/">
+            <Image
+              src="/icons/logo-full.svg"
+              height={1000}
+              width={1000}
+              className="logo h-10 mb-12 w-fit"
+              alt="logo"
+            />
+          </Link>
 
           <LoginForm />
 
@@ -29,19 +31,23 @@ export default function page() {
             </span>
 
             <span className="">
-              <Link href="/register" className="text-[#636369] leading-8 text-sm">Register</Link>
+              <Link
+                href="/register"
+                className="text-[#636369] leading-8 text-sm"
+              >
+                Register
+              </Link>
             </span>
           </div>
-
         </div>
       </main>
-      <Image 
-      src="/images/onboarding-img.png"
-      height={1000}
-      width={1000}
-      alt="patient"
-      className="side-img max-w-[50%]"/>
-
+      <Image
+        src="/images/onboarding-img.png"
+        height={1000}
+        width={1000}
+        alt="patient"
+        className="side-img max-w-[50%]"
+      />
     </div>
   );
 }

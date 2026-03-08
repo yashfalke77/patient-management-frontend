@@ -2,20 +2,13 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import styles from "@/styles/page.module.css";
 import { jwtDecode } from "jwt-decode";
 import { useRouter } from "next/navigation";
-
-
-type TokenPayload = {
-  sub?: string;
-  role?: string;
-};
+import { TokenPayload } from "@/types";
 
 const HeroSection = () => {
   const [id, setId] = useState("");
-  const [role, setRole] = useState("");
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -25,10 +18,8 @@ const HeroSection = () => {
     try {
       const decoded = jwtDecode<TokenPayload>(token);
       setId(decoded?.sub || "");
-      setRole(decoded?.role || "");
     } catch {
       setId("");
-      setRole("");
     }
   }, []);
 

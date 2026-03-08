@@ -6,3 +6,8 @@ declare type SearchParamProps = {
 
 declare type Gender = "Male" | "Female" | "Other";
 declare type Status = "pending" | "scheduled" | "cancelled";
+
+export type TokenPayload = {
+  sub?: string;
+  role?: string;
+};

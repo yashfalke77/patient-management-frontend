@@ -1,23 +1,32 @@
-import RegisterPatientForm from '@/components/forms/RegisterPatientForm'
-import Image from 'next/image'
-import React from 'react'
-import {getPatientById} from '@/services/patient.service'
-import { PatientSchema } from '@/models/patient.model'
+import RegisterPatientForm from "@/components/forms/RegisterPatientForm";
+import Image from "next/image";
+import React from "react";
+import { getPatientById } from "@/services/patient.service";
+import { PatientSchema } from "@/models/patient.model";
+import Link from "next/link";
 
-const page = async ({params} : SearchParamProps) => {
+const page = async ({ params }: SearchParamProps) => {
   const { patientId } = await params;
   const patient: PatientSchema = await getPatientById(patientId);
 
-  console.log(patient)
+  console.log(patient);
   return (
-    <div className='flex h-screen max-h-screen'>
-        <section className='remove-scrollbar container'>
-            <div className='sub-container max-w-[860px] flex-1 flex-col py-10'>
-                <Image src="/icons/logo-full.svg" height={1000} width={1000} alt='careplus' className='mb-12 h-10 w-fit' />
+    <div className="flex h-screen max-h-screen">
+      <section className="remove-scrollbar container">
+        <div className="sub-container max-w-[860px] flex-1 flex-col py-10">
+          <Link href="/">
+            <Image
+              src="/icons/logo-full.svg"
+              height={1000}
+              width={1000}
+              alt="careplus"
+              className="mb-12 h-10 w-fit"
+            />
+          </Link>
 
-                <RegisterPatientForm patient={patient}/>
+          <RegisterPatientForm patient={patient} />
 
-                <div className="flex justify-between mt-4">
+          <div className="flex justify-between mt-4">
             <span className="text-[#636369] leading-8 text-sm py-12">
               © CarePlus by{" "}
               <a
@@ -28,17 +37,17 @@ const page = async ({params} : SearchParamProps) => {
               </a>
             </span>
           </div>
-            </div>
-        </section>
-        <Image
-                src="/images/register-img.png"
-                height={1000}
-                width={1000}
-                alt="patient"
-                className="side-img max-w-[390px]"
-              />
+        </div>
+      </section>
+      <Image
+        src="/images/register-img.png"
+        height={1000}
+        width={1000}
+        alt="patient"
+        className="side-img max-w-[390px]"
+      />
     </div>
-  )
-}
+  );
+};
 
 export default page;

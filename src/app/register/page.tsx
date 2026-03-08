@@ -7,13 +7,15 @@ export default function page() {
     <div className="remove-scrollbar flex h-screen max-h-screen;">
       <main className="container my-auto;">
         <div className="sub-container max-w-[496px]">
-          <Image
-            src="/icons/logo-full.svg"
-            height={1000}
-            width={1000}
-            className="logo h-10 mb-12 w-fit"
-            alt="logo"
-          />
+          <Link href="/">
+            <Image
+              src="/icons/logo-full.svg"
+              height={1000}
+              width={1000}
+              className="logo h-10 mb-12 w-fit"
+              alt="logo"
+            />
+          </Link>
 
           <RegisterUserForm />
 
@@ -29,7 +31,9 @@ export default function page() {
             </span>
 
             <span className="">
-              <Link href="/login" className="text-[#636369] leading-8 text-sm">Login</Link>
+              <Link href="/login" className="text-[#636369] leading-8 text-sm">
+                Login
+              </Link>
             </span>
           </div>
         </div>
