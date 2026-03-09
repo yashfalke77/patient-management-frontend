@@ -13,15 +13,20 @@ const page = async () => {
   const recentAppointment = await getRecentAppointments();
 
   const doctorIds = [
-    ...new Set(recentAppointment.documents.map((a: Appointment) => a.doctorId)),
+    ...new Set(
+      recentAppointment.documents.map(
+        (a: Appointment) => a.doctorId as string
+      )
+    ),
   ];
+
   const doctors = await Promise.all(
-    doctorIds.map((id: string) => getDoctorById(id)),
-  );
-  const doctorMap: Record<string, Doctor> = Object.fromEntries(
-    doctors.map((d: Doctor) => [d.id, d]),
+    doctorIds.map((id) => getDoctorById(id as string))
   );
 
+  const doctorMap: Record<string, Doctor> = Object.fromEntries(
+    doctors.map((d: Doctor) => [d.id, d])
+  );
 
   return (
     <div className="mx-auto flex max-w-7xl flex-col space-y-14">
@@ -68,7 +73,11 @@ const page = async () => {
           />
         </section>
 
-        <DataTable columns={columns} data={recentAppointment.documents} doctorMap={doctorMap} />
+        <DataTable
+          columns={columns}
+          data={recentAppointment.documents}
+          doctorMap={doctorMap}
+        />
       </main>
     </div>
   );
