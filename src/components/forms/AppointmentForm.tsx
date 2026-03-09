@@ -119,7 +119,7 @@ export default function AppointmentForm({
 
     try {
       if (type === "create" && patientId) {
-        const appointmentPayload: Appointment = {
+        const appointmentPayload: any = {
           userId,
           patientId: patientId as string,
           doctorId: values.primaryPhysician,

@@ -4,6 +4,7 @@ import React from "react";
 import { getPatientById } from "@/services/patient.service";
 import { PatientSchema } from "@/models/patient.model";
 import Link from "next/link";
+import { SearchParamProps } from "@/types";
 
 const page = async ({ params }: SearchParamProps) => {
   const { patientId } = await params;

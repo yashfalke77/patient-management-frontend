@@ -3,6 +3,7 @@ import { Doctor } from "@/models/doctor.model";
 import { PatientSchema } from "@/models/patient.model";
 import { getAllActiveDoctors } from "@/services/doctor.service";
 import { getPatientByUserId } from "@/services/patient.service";
+import { SearchParamProps } from "@/types";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";

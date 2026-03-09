@@ -7,6 +7,7 @@ import { Doctors } from "@/constants";
 import { formatDateTime } from "@/lib/utils";
 import { getAppointmentById } from "@/services/appointment.service";
 import { getDoctorById } from "@/services/doctor.service";
+import { SearchParamProps } from "@/types";
 
 const RequestSuccess = async ({
   searchParams,
