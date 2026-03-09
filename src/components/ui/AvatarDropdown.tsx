@@ -31,7 +31,7 @@ export function AvatarDropdown({ onLogout }: AvatarDropdownProps) {
         <DropdownMenuGroup>
           <Link href="/">
             <DropdownMenuItem className="hover:bg-dark-500 focus:bg-dark-500 cursor-pointer rounded-lg">
-              My Appointments
+              Appointments
             </DropdownMenuItem>
           </Link>
           <DropdownMenuItem className="hover:bg-dark-500 focus:bg-dark-500 cursor-pointer rounded-lg">
