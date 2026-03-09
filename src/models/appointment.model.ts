@@ -1,3 +1,5 @@
+import { Status } from "@/types";
+
 export interface Appointment {
   patientId: string;
   schedule: Date;
@@ -8,4 +10,7 @@ export interface Appointment {
   userId: string;
   cancellationReason: string | null;
   doctorId: string;
+  patientName: string;
+  id: string;
+
 }

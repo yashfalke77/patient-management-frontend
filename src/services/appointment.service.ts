@@ -16,7 +16,7 @@ export const createNewAppointment = async(appointmentRequest: Appointment, token
 }
 
 export const updateAppointment = async(appointmentId: string, appointmentRequest: Partial<Appointment>, token: string) => {
-    const { data: appointment } = await axios.put(
+    const { data: appointment } = await axios.patch(
         `${backendApiUrl}/api/appointment/${appointmentId}`,
         appointmentRequest,
         {
@@ -29,9 +29,15 @@ export const updateAppointment = async(appointmentId: string, appointmentRequest
 }
 
 export const getAppointmentById = async(appointmentId: string) =>{
-    console.log("appointmentId:", appointmentId);
     const {data: appointment} = await axios.get(
         `${backendApiUrl}/api/appointment/${appointmentId}`
     )
     return appointment;
+}
+
+export const getRecentAppointments = async() => {
+    const {data: recentAppointments} = await axios.get(
+        `${backendApiUrl}/api/appointment/recent`
+    )
+    return recentAppointments;
 }

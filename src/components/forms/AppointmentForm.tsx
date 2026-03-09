@@ -1,6 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable react-hooks/purity */
-/* eslint-disable @typescript-eslint/no-non-null-asserted-optional-chain */
 "use client";
 
 import * as React from "react";
@@ -18,7 +17,12 @@ import Image from "next/image";
 import { Appointment } from "@/models/appointment.model";
 import { Doctor } from "@/models/doctor.model";
 import { useRouter } from "next/navigation";
-import { createNewAppointment} from "@/services/appointment.service";
+import {
+  createNewAppointment,
+  updateAppointment,
+} from "@/services/appointment.service";
+import { Status } from "@/types";
+import { getAllActiveDoctors } from "@/services/doctor.service";
 
 export default function AppointmentForm({
   userId,
@@ -26,26 +30,65 @@ export default function AppointmentForm({
   type,
   appointment,
   setOpen,
-  doctorsArray
 }: {
   userId: string;
   patientId: string;
   type: "create" | "schedule" | "cancel";
   appointment?: Appointment;
   setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
-  doctorsArray?: Doctor[]
 }) {
   const [isLoading, setIsLoading] = useState(false);
-  const[token, setToken] = useState("");
+  const [token, setToken] = useState("");
+  const [doctors, setDoctors] = useState<Doctor[]>([]);
 
+  const router = useRouter();
+
+  // Load token
   React.useEffect(() => {
     const token = localStorage.getItem("token");
-    if(token){
-      setToken(token);
+    if (token) setToken(token);
+  }, []);
+
+  // Fetch doctors
+  React.useEffect(() => {
+    const fetchDoctors = async () => {
+      try {
+        const doctorArray: Doctor[] = await getAllActiveDoctors();
+        setDoctors(doctorArray);
+      } catch (error) {
+        console.error("Failed to fetch doctors:", error);
+      }
+    };
+    fetchDoctors();
+  }, []);
+
+  const AppointmentFormValidation = getAppointmentSchema(type);
+
+  const form = useForm<z.infer<typeof AppointmentFormValidation>>({
+    resolver: zodResolver(AppointmentFormValidation) as any,
+    defaultValues: {
+      primaryPhysician: "",
+      schedule: appointment
+        ? new Date(appointment.schedule!)
+        : new Date(),
+      reason: appointment?.reason || "",
+      note: appointment?.note || "",
+      cancellationReason: appointment?.cancellationReason || "",
+    },
+  });
+
+  // Reset form when doctors + appointment load
+  React.useEffect(() => {
+    if (appointment && doctors.length > 0) {
+      form.reset({
+        primaryPhysician: appointment.doctorId,
+        schedule: new Date(appointment.schedule!),
+        reason: appointment.reason || "",
+        note: appointment.note || "",
+        cancellationReason: appointment.cancellationReason || "",
+      });
     }
-  }, [])
-  
-  const router = useRouter();
+  }, [appointment, doctors, form]);
 
   let buttonLabel;
   switch (type) {
@@ -56,23 +99,8 @@ export default function AppointmentForm({
       buttonLabel = "Schedule Appointment";
       break;
     default:
-      buttonLabel = "Submit Apppointment";
+      buttonLabel = "Submit Appointment";
   }
-
-  const AppointmentFormValidation = getAppointmentSchema(type);
-
-  const form = useForm<z.infer<typeof AppointmentFormValidation>>({
-    resolver: zodResolver(AppointmentFormValidation) as any,
-    defaultValues: {
-      primaryPhysician: appointment ? appointment?.primaryPhysician : "",
-      schedule: appointment
-        ? new Date(appointment?.schedule!)
-        : new Date(Date.now()),
-      reason: appointment ? appointment.reason : "",
-      note: appointment?.note || "",
-      cancellationReason: appointment?.cancellationReason || "",
-    },
-  });
 
   async function onSubmit(values: z.infer<typeof AppointmentFormValidation>) {
     setIsLoading(true);
@@ -91,7 +119,7 @@ export default function AppointmentForm({
 
     try {
       if (type === "create" && patientId) {
-        const appointment: Appointment = {
+        const appointmentPayload: Appointment = {
           userId,
           patientId: patientId as string,
           doctorId: values.primaryPhysician,
@@ -101,34 +129,41 @@ export default function AppointmentForm({
           note: values.note as string,
         };
 
-        const newAppointment = await createNewAppointment(appointment, token);
-        console.log(newAppointment);
+        const newAppointment = await createNewAppointment(
+          appointmentPayload,
+          token,
+        );
 
         if (newAppointment) {
           form.reset();
           router.push(
-            `/appointment/new/${userId}/success?appointmentId=${newAppointment.id}`
+            `/appointment/new/${userId}/success?appointmentId=${newAppointment.id}`,
           );
         }
       } else {
         const appointmentToUpdate = {
-          
-            primaryPhysician: values.primaryPhysician,
-            schedule: new Date(values.schedule),
-            status: status as Status,
-            cancellationReason: values.cancellationReason,
+          primaryPhysician: values.primaryPhysician,
+          schedule: new Date(values.schedule),
+          status: status as Status,
+          cancellationReason: values.cancellationReason,
         };
 
-        // const updatedAppointment = await updateAppointment(appointmentToUpdate);
+        const updatedAppointment = await updateAppointment(
+          appointment?.id as string,
+          appointmentToUpdate,
+          token,
+        );
 
         if (updatedAppointment) {
           setOpen && setOpen(false);
           form.reset();
+          router.refresh();
         }
       }
     } catch (error) {
       console.log(error);
     }
+
     setIsLoading(false);
   }
 
@@ -138,7 +173,7 @@ export default function AppointmentForm({
         <form
           id="patientForm"
           onSubmit={form.handleSubmit(onSubmit, (errors) => {
-            console.log("❌ Validation errors:", errors); // add this
+            console.log("Validation errors:", errors);
           })}
           className="space-y-6 flex-1"
         >
@@ -160,8 +195,8 @@ export default function AppointmentForm({
                 label="Doctor"
                 placeHolder="Select a doctor"
               >
-                {doctorsArray && doctorsArray.map((doctor, i) => (
-                  <SelectItem key={doctor.id + i} value={doctor.id}>
+                {doctors.map((doctor) => (
+                  <SelectItem key={doctor.id} value={doctor.id}>
                     <div className="flex cursor-pointer items-center gap-2">
                       <Image
                         src={doctor.imageUrl}
@@ -186,14 +221,14 @@ export default function AppointmentForm({
               />
 
               <div
-                className={`flex flex-col gap-6  ${type === "create" && "xl:flex-row"}`}
+                className={`flex flex-col gap-6 ${type === "create" && "xl:flex-row"}`}
               >
                 <CustomFormField
                   fieldType={FormFieldTypes.TEXTAREA}
                   control={form.control}
                   name="reason"
                   label="Appointment reason"
-                  placeHolder="Annual montly check-up"
+                  placeHolder="Annual monthly check-up"
                   disabled={type === "schedule"}
                 />
 
@@ -221,13 +256,14 @@ export default function AppointmentForm({
 
           <SubmitButton
             isLoading={isLoading}
-            className={`${type === "cancel" ? "shad-danger-btn" : "shad-primary-btn"} w-full`}
+            className={`${
+              type === "cancel" ? "shad-danger-btn" : "shad-primary-btn"
+            } w-full`}
           >
             {buttonLabel}
           </SubmitButton>
         </form>
-      </Form>{" "}
-      {/* ← close Form */}
+      </Form>
     </section>
   );
 }

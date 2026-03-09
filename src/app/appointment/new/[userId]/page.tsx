@@ -10,7 +10,6 @@ import React from "react";
 const page = async ({ params }: SearchParamProps) => {
   const { userId } = await params;
   const patient: PatientSchema = await getPatientByUserId(userId);
-  const doctorArray: Doctor[] = await getAllActiveDoctors();
 
   return (
     <div className="remove-scrollbar flex h-screen max-h-screen;">
@@ -30,7 +29,6 @@ const page = async ({ params }: SearchParamProps) => {
             type="create"
             userId={userId}
             patientId={patient.Id as string}
-            doctorsArray={doctorArray}
           />
 
           <span className="text-[#636369] leading-8 text-sm">
